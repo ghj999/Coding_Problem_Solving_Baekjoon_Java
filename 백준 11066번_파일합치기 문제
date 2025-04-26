@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+    static int[] sum; // 누적할 저장 배열(sum[i] = 1번 ~ i번 파일까지 크기 합)
+    static int[][] dp; // dp[i][j] = i번 파일부터 j번 파일가지 합치는 최소 비용
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();// 테스트 케이스 개수
+
+        while (T-- > 0) {
+            int K = sc.nextInt(); // 파일 개수
+            int[] arr = new int[K + 1]; //파일 크기 저장 배열 (1-indexed)
+            sum = new int[K + 1];
+            dp = new int[K + 1][K + 1];
+
+            // 파일 크기 입력받고 누적합 계산
+            for (int i = 1; i <= K; i++) {
+                arr[i] = sc.nextInt();
+                sum[i] = sum[i - 1] + arr[i];
+            }
+
+            // 구간 길이 2부터 시작해서 점점 늘려가며 dp 계산
+            for (int len = 2; len <= K; len++) { // len = 합치는 파일 수
+                for (int i = 1; i <= K - len + 1; i++) { // i = 구간 시작 파일 번호
+                    int j = i + len - 1; // j = 구간 끝 파일 번호
+                    dp[i][j] = Ineteger.MAX_VALUE; // 초기값 크게 설정
+
+                    // i~j 구간을 k 기준으로 둘로 나눠서 최소 비용 찾기
+                    for (int k = i; k < j; k++) {
+                        dp[i][j] = Math.min(dp[i][j],
+                                dp[i][k] + dp[k + 1][j] + sum[j] - sum[i - 1]);
+                    }
+                }
+            }
+            System.out.println(dp[1][K]); //1번 파일부터 K번 파일까지 합치는 최소 비용 출력
+        }
+    }
+}
