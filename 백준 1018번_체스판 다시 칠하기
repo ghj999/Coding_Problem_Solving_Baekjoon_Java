@@ -1,0 +1,40 @@
+import java.util.Scanner;
+
+public class Main {
+    static String[] board;
+    static int minPaint = Integer.MAX_VALUE;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int M = sc.nextInt();
+        sc.nextLine();
+        board = new String[N];
+        for (int i = 0; i < N; i++) {
+            board[i] = sc.nextLine();
+        }
+
+        for (int i = 0; i <= N - 8; i++) {
+            for (int j = 0; j <= M - 8; j++) {
+                countPaint(i, j);
+            }
+        }
+
+        System.out.println(minPaint);
+    }
+
+    static void countPaint(int x, int y) {
+        int count1 = 0;
+        int count2 = 0;
+        char[] color = {'W', 'B'};
+
+        for (int i = x; i < x + 8; i++) {
+            for (int j = y; j < y + 8; j++) {
+                if (board[i].charAt(j) != color[(i + j) % 2]) count1++;
+                if (board[i].charAt(j) != color[(i + j + 1) % 2]) count2++;
+            }
+        }
+
+        minPaint = Math.min(minPaint, Math.min(count1, count2));
+    }
+}
