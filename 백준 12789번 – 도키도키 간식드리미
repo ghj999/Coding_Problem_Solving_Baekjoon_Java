@@ -1,0 +1,38 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        String[] tokens = br.readLine().split(" ");
+        Queue<Integer> queue = new LinkedList<>();
+        Stack<Integer> stack = new Stack<>();
+
+        for (String token : tokens) {
+            queue.offer(Integer.parseInt(token));
+        }
+
+        int target = 1;
+        while (!queue.isEmpty()) {
+            if (queue.peek() == target) {
+                queue.poll();
+                target++;
+            } else if (!stack.isEmpty() && stack.peek() == target) {
+                stack.pop();
+                target++;
+            } else {
+                stack.push(queue.poll());
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            if (stack.pop() != target++) {
+                System.out.println("Sad");
+                return;
+            }
+        }
+
+        System.out.println("Nice");
+    }
+}
